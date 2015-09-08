@@ -12,10 +12,10 @@
     event.preventDefault();
 
     var selection = window.getSelection(),
-        anchorNode = selection.anchorNode,
-        anchorOffset = selection.anchorOffset,
-        focusNode = selection.focusNode,
-        focusOffset = selection.focusOffset,
+        startNode = selection.anchorNode,
+        startOffset = selection.anchorOffset,
+        endNode = selection.focusNode,
+        endOffset = selection.focusOffset,
         textContent,
         selectedText,
         rotatedText;
@@ -27,13 +27,13 @@
 
     // if all the selected text is within a single DOM element, the process
     // is much simpler.
-    if (anchorNode.isEqualNode(focusNode)) {
-      textContent = anchorNode.textContent;
-      selectedText = textContent.slice(anchorOffset, focusOffset);
+    if (startNode.isEqualNode(endNode)) {
+      textContent = startNode.textContent;
+      selectedText = textContent.slice(startOffset, endOffset);
       rotatedText = rot13(selectedText);
-      anchorNode.textContent = textContent.slice(0, anchorOffset) +
-                               rotatedText +
-                               textContent.slice(focusOffset);
+      startNode.textContent = textContent.slice(0, startOffset) +
+                              rotatedText +
+                              textContent.slice(endOffset);
     } else {
       window.console.log('rot13 on complex text is not yet implemaunt');
     }
