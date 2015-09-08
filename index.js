@@ -16,6 +16,7 @@
         startOffset = selection.anchorOffset,
         endNode = selection.focusNode,
         endOffset = selection.focusOffset,
+        restoredSelection,
         textContent,
         selectedText,
         rotatedText;
@@ -38,6 +39,12 @@
       window.console.log('rot13 on complex text is not yet implemaunt');
     }
 
+    restoredSelection = document.createRange();
+    restoredSelection.setStart(startNode, startOffset);
+    restoredSelection.setEnd(endNode, endOffset);
+    selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(restoredSelection);
   });
 
 
