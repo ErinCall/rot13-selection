@@ -11,7 +11,14 @@
   document.getElementById('the-button').addEventListener('click', function(event) {
     event.preventDefault();
 
-    var selection = window.getSelection();
+    var selection = window.getSelection(),
+        anchorNode = selection.anchorNode,
+        anchorOffset = selection.anchorOffset,
+        focusNode = selection.focusNode,
+        focusOffset = selection.focusOffset,
+        textContent,
+        selectedText,
+        rotatedText;
     // isCollapsed indicates that the "selection" is just a cursor position,
     // basically.
     if (selection.isCollapsed) {
@@ -20,13 +27,15 @@
 
     // if all the selected text is within a single DOM element, the process
     // is much simpler.
-    if (selection.anchorNode.isEqualNode(selection.focusNode)) {
-      var textContent = selection.anchorNode.textContent;
-      var selectedText = textContent.slice(selection.anchorOffset, selection.focusOffset);
-      var rotatedText = rot13(selectedText);
-      selection.anchorNode.textContent = textContent.slice(0, selection.anchorOffset) + rotatedText + textContent.slice(selection.focusOffset);
+    if (anchorNode.isEqualNode(focusNode)) {
+      textContent = anchorNode.textContent;
+      selectedText = textContent.slice(anchorOffset, focusOffset);
+      rotatedText = rot13(selectedText);
+      anchorNode.textContent = textContent.slice(0, anchorOffset) +
+                               rotatedText +
+                               textContent.slice(focusOffset);
     } else {
-      console.log('rot13 on complex text is not yet implemaunt');
+      window.console.log('rot13 on complex text is not yet implemaunt');
     }
 
   });
