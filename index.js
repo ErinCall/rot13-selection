@@ -2,8 +2,13 @@
 (function() {
   'use strict';
 
-// TODO: IE8 has a bug where just defining a context menu handler will
-// cancel the default context menu.
+/*
+  TODO: IE8 has a bug where just defining a context menu handler will cancel
+    the default context menu (according to MDN).
+  TODO: Does IE support getSelection? I have unconfirmed reports it doesn't.
+  TODO: What happens when there's text selected in e.g. a textarea?
+*/
+
   // window.oncontextmenu = function(event) {
   //   event.preventDefault();
   // };
