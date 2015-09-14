@@ -22,10 +22,10 @@
   // structure.
   function rotateSelection() {
     var selection = window.getSelection(),
-        startNode = selection.anchorNode,
-        startOffset = selection.anchorOffset,
-        endNode = selection.focusNode,
-        endOffset = selection.focusOffset,
+        startNode = selection.getRangeAt(0).startContainer,
+        startOffset = selection.getRangeAt(0).startOffset,
+        endNode = selection.getRangeAt(0).endContainer,
+        endOffset = selection.getRangeAt(0).endOffset,
         restoredSelection;
     // isCollapsed indicates that the "selection" is just a cursor position,
     // basically. There's no text selected and nothing to do.
