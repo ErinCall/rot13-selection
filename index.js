@@ -36,15 +36,8 @@
     rotateStartingAtNode(startNode, startOffset, endNode, endOffset);
 
     restoredSelection = document.createRange();
-    /*
-    According to the MDN docs, this code should be
     restoredSelection.setStart(startNode, startOffset);
     restoredSelection.setEnd(endNode, endOffset);
-    and indeed, that would make a lot more sense. It doesn't work in firefox,
-    though, and the code here does!
-    */
-    restoredSelection.setStart(endNode, endOffset);
-    restoredSelection.setStart(startNode, startOffset);
     selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(restoredSelection);
