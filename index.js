@@ -93,7 +93,8 @@
                          textContent.slice(endOffset);
   }
 
-  // Try and find the node that comes after the given node.
+  // Try and find the node that comes after the given node: either its sibling
+  // if it has one, or its parent's sibling if not.
   function nextNode(node) {
     if (node.nextSibling !== null) {
       return node.nextSibling;
@@ -105,7 +106,7 @@
             "recursion logic in _rotateStartingAtNode; it should have hit " +
             "the node.isEqualNode(endNode) case, but instead seems to have " +
             "skipped over the endNode and walked all the way to the end of " +
-            "the document."
+            "the document.";
     }
   }
 
