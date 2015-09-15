@@ -1,22 +1,12 @@
 /* jshint browser:true */
 (function() {
   'use strict';
+  var rotButton;
 
 /*
-  TODO: IE8 has a bug where just defining a context menu handler will cancel
-    the default context menu (according to MDN).
   TODO: Does IE support getSelection? I have unconfirmed reports it doesn't.
   TODO: What happens when there's text selected in e.g. a textarea?
 */
-
-  // window.oncontextmenu = function(event) {
-  //   event.preventDefault();
-  // };
-
-  document.getElementById('the-button').addEventListener('click', function(event) {
-    event.preventDefault();
-    rotateSelection();
-  });
 
   // Apply rot13 to all the text in the given selection, preserving document
   // structure.
@@ -144,4 +134,73 @@
       .replace(/[a-z]/g, rot13From("a".charCodeAt(0)))
       .replace(/[A-Z]/g, rot13From("A".charCodeAt(0)));
   }
+
+  // create a buttony div at the given x/y coordinates, with a click event
+  // that'll trigger rot13ing the selected text.
+  function createRotButton(x, y) {
+    // In practice, I don't expect this function to be be called while
+    // rotButton exists, but just in case, remove any pre-existing instance.
+    if (rotButton) { removeRotButton(); }
+
+    /*
+      mousedown/up handler for the rot13 button. stopPropagation stops the
+      button from being destroyed, or a new button from being created, when the
+      button gets clicked. preventDefault stops the selection from being
+      cancelled.
+    */
+    function intercept(event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
+
+    rotButton = document.createElement('div');
+
+    rotButton.style.position = 'absolute';
+    rotButton.style.left = x + 'px';
+    rotButton.style.top = y + 'px';
+    rotButton.style['background-color'] = '#fff';
+    rotButton.style.padding = '2px 5px 2px 5px';
+    rotButton.style.border = '1px solid black';
+    rotButton.style['border-radius'] = '6px';
+    rotButton.textContent = 'rot13';
+    rotButton.addEventListener('mouseenter', function() {
+      rotButton.style['background-color'] = '#bbd';
+    });
+    rotButton.addEventListener('mouseleave', function() {
+      rotButton.style['background-color'] = '#fff';
+    })
+
+    rotButton.addEventListener('mousedown', intercept);
+    rotButton.addEventListener('mouseup', intercept);
+    rotButton.addEventListener('click', rotateSelection);
+    document.body.appendChild(rotButton);
+  }
+
+  // remove the rotButton from the document and delete it.
+  function removeRotButton() {
+    if (rotButton) {
+      rotButton.parentElement.removeChild(rotButton);
+      rotButton = undefined;
+    }
+  }
+
+  // If a user selects some text, create a button to rot13 it.
+  window.addEventListener('mouseup', function(event) {
+    // When clicking to deselect, I've sometimes seen this event fire before
+    // the selection goes away. Setting a 0 timeout just bumps us to the back
+    // of the handler queue so that window.getSelection() is definitely in the
+    // latest state.
+    window.setTimeout(function() {
+      if (! window.getSelection().isCollapsed) {
+        createRotButton(event.pageX, event.pageY);
+      }
+    }, 0)
+  });
+
+  // if you click on anything--a button, some text you'd like to rot13 some
+  // more, anything--the rot button should go away. If we're about to need a
+  // rot button, the mouseup event can create a new one.
+  window.addEventListener('mousedown', function() {
+    removeRotButton();
+  });
 })();
