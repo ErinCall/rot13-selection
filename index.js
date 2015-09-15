@@ -5,7 +5,6 @@
 
 /*
   TODO: Does IE support getSelection? I have unconfirmed reports it doesn't.
-  TODO: What happens when there's text selected in e.g. a textarea?
 */
 
   // Apply rot13 to all the text in the given selection, preserving document
